@@ -77,4 +77,29 @@ class DBManager:
         curs.close()
         return result
 
-
+    def info_vacancies(self, vacancies):
+        """Получение информации о вакансии"""
+        curs = self.connect.cursor()
+        for vacancy in vacancies:
+            curs.execute("""
+                INSERT INTO companies (company_id, company_name)
+                VALUES (%s, %s)
+                ON CONFLICT (company_id) DO NOTHING;
+            """, (
+                vacancy['employer']['id'], vacancy['employer']['name']
+            ))
+            curs.execute("""
+                INSERT INTO vacancies (vacancy_id, company_id, vacancy_name, vacancy_url, salary, city, published_date,  company_name)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                ON CONFLICT (vacancy_id) DO UPDATE
+                SET vacancy_id = excluded.vacancy_id, company_id = excluded.company_id,
+                    vacancy_name = excluded.vacancy_name, vacancy_url = excluded.vacancy_url,
+                    salary = excluded.salary, city = excluded.city,
+                    published_date = excluded.published_date, company_name = excluded.company_name;
+            """, (
+                vacancy['id'], vacancy['employer']['id'], vacancy['name'], vacancy['alternate_url'],
+                vacancy['salary']['from'],
+                vacancy['area']['name'], vacancy['published_at'], vacancy['employer']['name']
+            ))
+        self.connect.commit()
+        curs.close()
