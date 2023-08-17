@@ -52,4 +52,29 @@ class DBManager:
         curs.close()
         return result
 
+    def get_vacancies_with_higher_salary(self):
+        """Получает список всех вакансий, у которых зарплата выше средней по всем вакансиям."""
+        avg_salary = self.get_avg_salary()
+        curs = self.connect.cursor()
+        curs.execute(f"""
+            SELECT vacancy_name
+            FROM vacancies 
+            WHERE salary > (SELECT avg(salary) FROM vacancies)
+        """)
+        result = curs.fetchall()
+        curs.close()
+        return result
+
+    def get_vacancies_with_keyword(self, keyword):
+        """Получает список всех вакансий, в названии которых содержатся переданные в метод слова, например python."""
+        curs = self.connect.cursor()
+        curs.execute(f"""
+            SELECT company_name, vacancy_name, salary
+            FROM vacancies 
+            WHERE vacancy_name LIKE '%{keyword}%';
+        """)
+        result = curs.fetchall()
+        curs.close()
+        return result
+
 
