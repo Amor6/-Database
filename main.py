@@ -13,7 +13,7 @@ def main():
     print(" Информация о вакансий у компаний:")
     for row in companies_vacancies_count:
         print(row[0], "-", row[1])
-  # Получение информации о компании и её вакансиях
+    # Получение информации о компани    и и её вакансиях
 
     all_vacancies = dbass.get_all_vacancies()
     print("Список вакансий:")
@@ -23,7 +23,7 @@ def main():
 
     avg_salary = dbass.get_avg_salary()
     print("Средняя зарплата по вакансиям:", avg_salary)
-    #Средняя ЗП по вакансиях
+    # Средняя ЗП по вакансиях
 
     high_salary_vacancies = dbass.get_vacancies_with_higher_salary()
     print("Вакансии с зарплатой выше средней:")
@@ -37,6 +37,7 @@ def main():
     for row in vacancies_with_keyword:
         print(row[0], "-", row[1], "-", row[2])
     # Сортировка вакансий по запрашиваемому слову
+
 
 if __name__ == '__main__':
     main()
