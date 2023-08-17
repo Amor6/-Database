@@ -27,3 +27,29 @@ class DBManager:
         curs.close()
         return result
 
+    def get_all_vacancies(self):
+
+        """Получает список всех вакансий с указанием названия компании, названия вакансии и зарплаты и ссылки на
+        вакансию."""
+
+        curs = self.connect.cursor()
+        curs.execute("""
+            SELECT * 
+            FROM vacancies;
+        """)
+        result = curs.fetchall()
+        curs.close()
+        return result
+
+    def get_avg_salary(self):
+        """Получает среднюю зарплату по вакансиям"""
+        curs = self.connect.cursor()
+        curs.execute("""
+            SELECT AVG(salary) 
+            FROM vacancies;
+        """)
+        result = curs.fetchone()[0]
+        curs.close()
+        return result
+
+
